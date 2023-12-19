@@ -291,7 +291,7 @@ class _DatePickerState extends State<_DatePickerComponent> {
           final double bottomPadding = MediaQuery.of(context).padding.bottom;
           return ClipRect(
             child: Opacity(
-              opacity: widget.route.animation!.value,
+              opacity: isMobile ? 1 : widget.route.animation!.value,
               child: CustomSingleChildLayout(
                 delegate: (isMobile ? _BottomPickerLayout.new : _CenterPickerLayout.new)(
                   widget.route.animation!.value,
