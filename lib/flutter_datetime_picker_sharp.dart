@@ -298,7 +298,7 @@ class _DatePickerState extends State<_DatePickerComponent> {
               ),
               child: GestureDetector(
                 child: Material(
-                  color: theme.backgroundColor,
+                  color: Colors.transparent,
                   child: _renderPickerView(theme),
                 ),
               ),
@@ -318,11 +318,20 @@ class _DatePickerState extends State<_DatePickerComponent> {
   Widget _renderPickerView(picker_theme.DatePickerTheme theme) {
     Widget itemView = _renderItemView(theme);
     if (widget.route.showTitleActions == true) {
-      return Column(
-        children: <Widget>[
-          _renderTitleActionsView(theme),
-          itemView,
-        ],
+      return Container(
+        decoration: BoxDecoration(
+          color: theme.backgroundColor ?? Theme.of(context).dialogBackgroundColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            _renderTitleActionsView(theme),
+            itemView,
+          ],
+        ),
       );
     }
     return itemView;
