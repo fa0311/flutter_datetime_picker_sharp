@@ -283,23 +283,27 @@ class _DatePickerState extends State<_DatePickerComponent> {
   @override
   Widget build(BuildContext context) {
     picker_theme.DatePickerTheme theme = widget.route.theme;
+    bool isMobile = MediaQuery.of(context).size.width < 500;
     return GestureDetector(
       child: AnimatedBuilder(
         animation: widget.route.animation!,
         builder: (BuildContext context, Widget? child) {
           final double bottomPadding = MediaQuery.of(context).padding.bottom;
           return ClipRect(
-            child: CustomSingleChildLayout(
-              delegate: _BottomPickerLayout(
-                widget.route.animation!.value,
-                theme,
-                showTitleActions: widget.route.showTitleActions!,
-                bottomPadding: bottomPadding,
-              ),
-              child: GestureDetector(
-                child: Material(
-                  color: Colors.transparent,
-                  child: _renderPickerView(theme),
+            child: Opacity(
+              opacity: widget.route.animation!.value,
+              child: CustomSingleChildLayout(
+                delegate: (isMobile ? _BottomPickerLayout.new : _CenterPickerLayout.new)(
+                  widget.route.animation!.value,
+                  theme,
+                  showTitleActions: widget.route.showTitleActions!,
+                  bottomPadding: bottomPadding,
+                ),
+                child: GestureDetector(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: _renderPickerView(theme, isMobile),
+                  ),
                 ),
               ),
             ),
@@ -315,15 +319,15 @@ class _DatePickerState extends State<_DatePickerComponent> {
     }
   }
 
-  Widget _renderPickerView(picker_theme.DatePickerTheme theme) {
+  Widget _renderPickerView(picker_theme.DatePickerTheme theme, bool isMobile) {
     Widget itemView = _renderItemView(theme);
     if (widget.route.showTitleActions == true) {
       return Container(
         decoration: BoxDecoration(
           color: theme.backgroundColor ?? Theme.of(context).dialogBackgroundColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(10.0),
+            bottom: Radius.circular(isMobile ? 0.0 : 10.0),
           ),
         ),
         child: Column(
@@ -550,18 +554,31 @@ class _DatePickerState extends State<_DatePickerComponent> {
   }
 }
 
-class _BottomPickerLayout extends SingleChildLayoutDelegate {
-  _BottomPickerLayout(
+class _PickerLayoutBase extends SingleChildLayoutDelegate {
+  _PickerLayoutBase(
     this.progress,
     this.theme, {
-    this.showTitleActions,
+    this.showTitleActions = null,
     this.bottomPadding = 0,
   });
-
   final double progress;
   final bool? showTitleActions;
   final picker_theme.DatePickerTheme theme;
   final double bottomPadding;
+
+  @override
+  bool shouldRelayout(_PickerLayoutBase oldDelegate) {
+    return progress != oldDelegate.progress;
+  }
+}
+
+class _BottomPickerLayout extends _PickerLayoutBase {
+  _BottomPickerLayout(
+    super.progress,
+    super.theme, {
+    super.showTitleActions = null,
+    super.bottomPadding = 0,
+  });
 
   @override
   BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
@@ -583,9 +600,35 @@ class _BottomPickerLayout extends SingleChildLayoutDelegate {
     final height = size.height - childSize.height * progress;
     return Offset(0.0, height);
   }
+}
+
+class _CenterPickerLayout extends _PickerLayoutBase {
+  _CenterPickerLayout(
+    super.progress,
+    super.theme, {
+    super.showTitleActions = null,
+    super.bottomPadding = 0,
+  });
 
   @override
-  bool shouldRelayout(_BottomPickerLayout oldDelegate) {
-    return progress != oldDelegate.progress;
+  BoxConstraints getConstraintsForChild(BoxConstraints constraints) {
+    double maxHeight = theme.containerHeight;
+    if (showTitleActions == true) {
+      maxHeight += theme.titleHeight;
+    }
+
+    return BoxConstraints(
+      minWidth: 500,
+      maxWidth: 500,
+      minHeight: 0.0,
+      maxHeight: maxHeight + bottomPadding,
+    );
+  }
+
+  @override
+  Offset getPositionForChild(Size size, Size childSize) {
+    final centerX = (size.width - childSize.width) / 2;
+    final centerY = (size.height - childSize.height) / 2;
+    return Offset(centerX, centerY);
   }
 }
