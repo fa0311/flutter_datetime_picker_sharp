@@ -1,42 +1,58 @@
+import 'package:flutter/widgets.dart';
+
 enum LocaleType {
-  en,
-  fa,
-  zh,
-  nl,
-  ru,
-  it,
-  fr,
-  gr,
-  es,
-  pl,
-  pt,
-  ko,
-  kk,
-  ar,
-  tr,
-  az,
-  jp,
-  de,
-  da,
-  mn,
-  bn,
-  vi,
-  hy,
-  id,
-  bg,
-  eu,
-  cat,
-  th,
-  si,
-  no,
-  sq,
-  sv,
-  kh,
-  tw,
-  fi,
-  uk,
-  he,
-  hi,
+  en("en", "US"),
+  fa("fa", "IR"),
+  zh("zh", "CN"),
+  nl("nl", "NL"),
+  ru("ru", "RU"),
+  it("it", "IT"),
+  fr("fr", "FR"),
+  gr("gr", "GR"),
+  es("es", "ES"),
+  pl("pl", "PL"),
+  pt("pt", "PT"),
+  ko("ko", "KR"),
+  kk("kk", "KZ"),
+  ar("ar", "SA"),
+  tr("tr", "TR"),
+  az("az", "AZ"),
+  jp("ja", "JP"),
+  de("de", "DE"),
+  da("da", "DK"),
+  mn("mn", "MN"),
+  bn("bn", "BD"),
+  vi("vi", "VN"),
+  hy("hy", "AM"),
+  id("id", "ID"),
+  bg("bg", "BG"),
+  eu("eu", "ES"),
+  cat("cat", "AD"),
+  th("th", "TH"),
+  si("si", "LK"),
+  no("no", "NO"),
+  sq("sq", "AL"),
+  sv("sv", "SE"),
+  kh("kh", "KH"),
+  tw("tw", "TW"),
+  fi("fi", "FI"),
+  uk("uk", "UA"),
+  he("he", "IL"),
+  hi("hi", "IN");
+
+  final String languageCode;
+  final String countryCode;
+
+  const LocaleType(this.languageCode, this.countryCode);
+
+  factory LocaleType.fromLocale(Locale locale) {
+    for (LocaleType type in LocaleType.values) {
+      if (type.languageCode == locale.languageCode) {
+        return type;
+      }
+    }
+    return LocaleType.en;
+  }
 }
 
 final _i18nModel = <LocaleType, Map<String, Object>>{
