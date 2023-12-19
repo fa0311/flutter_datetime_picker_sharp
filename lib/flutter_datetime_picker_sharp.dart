@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_sharp/src/custom_scroll_behavior.dart';
 import 'package:flutter_datetime_picker_sharp/src/date_model.dart';
 import 'package:flutter_datetime_picker_sharp/src/datetime_picker_theme.dart' as picker_theme;
 import 'package:flutter_datetime_picker_sharp/src/i18n_model.dart';
@@ -336,6 +337,7 @@ class _DatePickerState extends State<_DatePickerComponent> {
     ValueChanged<int> selectedChangedWhenScrolling,
     ValueChanged<int> selectedChangedWhenScrollEnd,
   ) {
+    final globalKey = GlobalKey();
     return Expanded(
       flex: layoutProportion,
       child: Container(
@@ -351,30 +353,66 @@ class _DatePickerState extends State<_DatePickerComponent> {
             }
             return false;
           },
-          child: CupertinoPicker.builder(
-            key: key,
-            backgroundColor: theme.backgroundColor,
-            scrollController: scrollController as FixedExtentScrollController,
-            itemExtent: theme.itemHeight,
-            onSelectedItemChanged: (int index) {
-              selectedChangedWhenScrolling(index);
-            },
-            useMagnifier: true,
-            itemBuilder: (BuildContext context, int index) {
-              final content = stringAtIndexCB(index);
-              if (content == null) {
-                return null;
+          child: GestureDetector(
+            key: globalKey,
+            onTapDown: (tapDownDetails) {
+              final box = globalKey.currentContext?.findRenderObject() as RenderBox;
+              final centerPosition = box.size.height / 2 - tapDownDetails.localPosition.dy;
+
+              if (centerPosition > 40) {
+                scrollController.animateToItem(
+                  scrollController.selectedItem - 2,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                );
+              } else if (centerPosition > 20) {
+                scrollController.animateToItem(
+                  scrollController.selectedItem - 1,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                );
+              } else if (centerPosition < -40) {
+                scrollController.animateToItem(
+                  scrollController.selectedItem + 2,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                );
+              } else if (centerPosition < -20) {
+                scrollController.animateToItem(
+                  scrollController.selectedItem + 1,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeOut,
+                );
               }
-              return Container(
-                height: theme.itemHeight,
-                alignment: Alignment.center,
-                child: Text(
-                  content,
-                  style: theme.itemStyle,
-                  textAlign: TextAlign.start,
-                ),
-              );
             },
+            child: ScrollConfiguration(
+              behavior: CustomScrollBehavior(),
+              child: CupertinoPicker.builder(
+                key: key,
+                backgroundColor: theme.backgroundColor,
+                scrollController: scrollController as FixedExtentScrollController,
+                itemExtent: theme.itemHeight,
+                onSelectedItemChanged: (int index) {
+                  selectedChangedWhenScrolling(index);
+                },
+                useMagnifier: true,
+                itemBuilder: (BuildContext context, int index) {
+                  final content = stringAtIndexCB(index);
+                  if (content == null) {
+                    return null;
+                  }
+                  return Container(
+                    height: theme.itemHeight,
+                    alignment: Alignment.center,
+                    child: Text(
+                      content,
+                      style: theme.itemStyle,
+                      textAlign: TextAlign.start,
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ),
       ),
