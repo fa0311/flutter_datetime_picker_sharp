@@ -1,10 +1,23 @@
-# Flutter Datetime Picker Plus
+# Flutter Datetime Picker Sharp
 
 Forked from [(Pub) flutter_datetime_picker](https://pub.dev/packages/flutter_datetime_picker) as it had issues with dart 3.0/Flutter 3.10.
 
 This package only works on Flutter >=3.10.0. If you need an older version, please use the original package.
 
-[(Pub) flutter_datetime_picker_plus](https://pub.dev/packages/flutter_datetime_picker_plus)
+
+```yaml
+dependencies:
+  flutter_datetime_picker_sharp:
+    git:
+      url: https://github.com/fa0311/flutter_datetime_picker_sharp
+```
+
+- Enhanced support for Windows (mouse operation)
+- Device now pops up in the center if the device screen is large enough
+- Now follows Flutter's color palette by default
+- LocaleType compatibility with Flutter Locale has been enhanced
+- Popups now have rounded corners
+- Tap to move forward or backward
 
 
 # Documentation
