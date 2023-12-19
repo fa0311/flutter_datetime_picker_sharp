@@ -462,7 +462,7 @@ class _DatePickerState extends State<_DatePickerComponent> {
               padding: EdgeInsetsDirectional.only(start: 16, top: 0),
               child: Text(
                 '$cancel',
-                style: theme.cancelStyle,
+                style: theme.cancelStyle ?? Theme.of(context).textTheme.labelLarge,
               ),
               onPressed: () {
                 Navigator.pop(context);
