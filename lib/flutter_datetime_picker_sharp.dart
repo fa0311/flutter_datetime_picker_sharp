@@ -296,7 +296,7 @@ class _DatePickerState extends State<_DatePickerComponent> {
   @override
   Widget build(BuildContext context) {
     picker_theme.DatePickerTheme theme = widget.route.theme;
-    bool isMobile = MediaQuery.of(context).size.width < 500;
+    bool isMobile = MediaQuery.of(context).size.width < 768;
     return GestureDetector(
       child: AnimatedBuilder(
         animation: widget.route.animation!,
@@ -682,8 +682,8 @@ class _CenterPickerLayout extends _PickerLayoutBase {
     }
 
     return BoxConstraints(
-      minWidth: 500,
-      maxWidth: 500,
+      minWidth: 768,
+      maxWidth: 768,
       minHeight: 0.0,
       maxHeight: maxHeight + bottomPadding,
     );
