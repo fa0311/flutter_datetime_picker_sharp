@@ -94,29 +94,17 @@ class CommonPickerModel extends BasePickerModel {
 
   @override
   void setLeftIndex(int index) {
-    if (_currentLeftIndex > index) {
-      _currentLeftIndex = _currentLeftIndex - 1;
-    } else if (_currentLeftIndex < index) {
-      _currentLeftIndex = _currentLeftIndex + 1;
-    }
+    _currentLeftIndex = index;
   }
 
   @override
   void setMiddleIndex(int index) {
-    if (_currentMiddleIndex > index) {
-      _currentMiddleIndex = _currentMiddleIndex - 1;
-    } else if (_currentMiddleIndex < index) {
-      _currentMiddleIndex = _currentMiddleIndex + 1;
-    }
+    _currentMiddleIndex = index;
   }
 
   @override
   void setRightIndex(int index) {
-    if (_currentRightIndex > index) {
-      _currentRightIndex = _currentRightIndex - 1;
-    } else if (_currentRightIndex < index) {
-      _currentRightIndex = _currentRightIndex + 1;
-    }
+    _currentRightIndex = index;
   }
 
   @override

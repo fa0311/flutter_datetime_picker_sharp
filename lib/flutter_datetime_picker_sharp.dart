@@ -455,6 +455,10 @@ class _DatePickerState extends State<_DatePickerComponent> {
   }
 
   Widget _renderItemView(picker_theme.DatePickerTheme theme) {
+    int lastLeft = 0;
+    int lastMiddle = 0;
+    int lastRight = 0;
+
     return Container(
       color: theme.backgroundColor,
       child: Directionality(
@@ -470,8 +474,16 @@ class _DatePickerState extends State<_DatePickerComponent> {
                       widget.pickerModel.leftStringAtIndex,
                       leftScrollCtrl,
                       widget.pickerModel.layoutProportions()[0], (index) {
+                      lastLeft = widget.pickerModel.currentLeftIndex();
                       widget.pickerModel.setLeftIndex(index);
                     }, (index) {
+                      if (lastLeft <
+                          widget.pickerModel.currentLeftIndex() - 1) {
+                        widget.pickerModel.setLeftIndex(lastLeft + 1);
+                      } else if (lastLeft >
+                          widget.pickerModel.currentLeftIndex() + 1) {
+                        widget.pickerModel.setLeftIndex(lastLeft - 1);
+                      }
                       setState(() {
                         refreshScrollOffset();
                         _notifyDateChanged();
@@ -491,8 +503,16 @@ class _DatePickerState extends State<_DatePickerComponent> {
                       widget.pickerModel.middleStringAtIndex,
                       middleScrollCtrl,
                       widget.pickerModel.layoutProportions()[1], (index) {
+                      lastMiddle = widget.pickerModel.currentMiddleIndex();
                       widget.pickerModel.setMiddleIndex(index);
                     }, (index) {
+                      if (lastMiddle <
+                          widget.pickerModel.currentMiddleIndex() - 1) {
+                        widget.pickerModel.setMiddleIndex(lastMiddle + 1);
+                      } else if (lastMiddle >
+                          widget.pickerModel.currentMiddleIndex() + 1) {
+                        widget.pickerModel.setMiddleIndex(lastMiddle - 1);
+                      }
                       setState(() {
                         refreshScrollOffset();
                         _notifyDateChanged();
@@ -513,8 +533,16 @@ class _DatePickerState extends State<_DatePickerComponent> {
                       widget.pickerModel.rightStringAtIndex,
                       rightScrollCtrl,
                       widget.pickerModel.layoutProportions()[2], (index) {
+                      lastRight = widget.pickerModel.currentRightIndex();
                       widget.pickerModel.setRightIndex(index);
                     }, (index) {
+                      if (lastRight <
+                          widget.pickerModel.currentRightIndex() - 1) {
+                        widget.pickerModel.setRightIndex(lastRight + 1);
+                      } else if (lastRight >
+                          widget.pickerModel.currentRightIndex() + 1) {
+                        widget.pickerModel.setRightIndex(lastRight - 1);
+                      }
                       setState(() {
                         refreshScrollOffset();
                         _notifyDateChanged();
